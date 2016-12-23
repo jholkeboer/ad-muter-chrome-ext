@@ -41,7 +41,20 @@ var screenshot = {
 				}, function(tabs) {
 					chrome.tabs.sendMessage(tabs[0].id, {ready : "ready"}, function(response) {
 						if (response.download === "download") {
-							screenshot.saveScreenshot();
+							// screenshot.saveScreenshot();
+                            console.log(screenshot.data);
+                            
+                            // send image to server
+                            var time = Date.now();
+                            var xhr = new XMLHttpRequest();
+                            xhr.open("POST", "http://localhost:5000/receive_image", true);
+                            xhr.setRequestHeader('Content-Type', 'application/json');
+                            xhr.send(JSON.stringify({
+                                time: time,
+                                image: screenshot.data
+                            }));
+
+                            screenshot.data = '';
 						}
 						else {
 							screenshot.data = '';
