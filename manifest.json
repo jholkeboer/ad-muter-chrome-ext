@@ -7,7 +7,7 @@
 
   "browser_action": {
     // "default_icon": "camera.png",
-    "default_title": "Screenshot"
+    "default_title": "Ad Muter"
   },
 
   "permissions": [

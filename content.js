@@ -9,7 +9,6 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
         } else {
             sendResponse({download : "download", recording: null});
         }
-
 	}
 		
 }); 
