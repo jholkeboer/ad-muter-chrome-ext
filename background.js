@@ -7,12 +7,12 @@ var screenshot = {
 		this.initEvents();
 	},
 
-    muteCurrentTab: function(decision) {
+    muteIfAd: function(decision) {
         chrome.tabs.query({
             active: true,
             currentWindow: true
         }, function(tabs) {
-            chrome.tabs.update(tabs[0].id, {muted: !decision});
+            chrome.tabs.update(tabs[0].id, {muted: decision});
         })    
     },
 
@@ -25,7 +25,7 @@ var screenshot = {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 reply = JSON.parse(xhr.responseText);
                 console.log(reply);
-                screenshot.muteCurrentTab(reply.decision);
+                screenshot.muteIfAd(!reply.decision);
             }
         }
         xhr.send(JSON.stringify({
@@ -34,6 +34,8 @@ var screenshot = {
         }));
         if (screenshot.recording) {
             setTimeout(screenshot.getScreencap, 2500);
+        } else {
+            screenshot.muteIfAd(false);
         }
     },
 
