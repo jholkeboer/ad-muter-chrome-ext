@@ -7,17 +7,33 @@ var screenshot = {
 		this.initEvents();
 	},
 
+    muteCurrentTab: function(decision) {
+        chrome.tabs.query({
+            active: true,
+            currentWindow: true
+        }, function(tabs) {
+            chrome.tabs.update(tabs[0].id, {muted: !decision});
+        })    
+    },
+
     sendImage : function(data) {
         var time = Date.now();
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "http://localhost:5000/receive_image", true);
         xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                reply = JSON.parse(xhr.responseText);
+                console.log(reply);
+                screenshot.muteCurrentTab(reply.decision);
+            }
+        }
         xhr.send(JSON.stringify({
             time: time,
             image: data
         }));
         if (screenshot.recording) {
-            setTimeout(screenshot.getScreencap, 3000);
+            setTimeout(screenshot.getScreencap, 2500);
         }
     },
 
